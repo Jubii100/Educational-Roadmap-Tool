@@ -10,7 +10,7 @@ class RoadmapCateg(models.Model):
 
 
 class Roadmap(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False)
+    creator = models.ForeignKey(User, related_name='roadmaps', on_delete=models.SET_NULL, null=True, blank=False)
     title = models.CharField(max_length=200, null=False, blank=True)
     description = models.TextField(null=False, blank=True)
     category = models.ForeignKey(RoadmapCateg, on_delete=models.SET_NULL, null=True, blank=False)
@@ -26,7 +26,7 @@ class Roadmap(models.Model):
 class RoadmapStep(models.Model):
     name = models.CharField(max_length=200, null=False, blank=True)
     description = models.TextField(blank=True)
-    roadmap = models.ForeignKey(Roadmap, on_delete=models.CASCADE, null=False, blank=False)
+    roadmap = models.ForeignKey(Roadmap, related_name='steps', on_delete=models.CASCADE, null=False, blank=False)
     order = models.PositiveIntegerField(validators=[validate_non_zero_oder], null=False, blank=False)
 
     class Meta:
@@ -39,7 +39,7 @@ class RoadmapStep(models.Model):
 class Resource(models.Model):
     name = models.CharField(max_length=100, null=False, blank=True)
     description = models.TextField(null=False, blank=True)
-    step = models.ForeignKey(RoadmapStep, on_delete=models.CASCADE, null=False, blank=False)
+    step = models.ForeignKey(RoadmapStep, related_name='resources', on_delete=models.CASCADE, null=False, blank=False)
     is_online = models.BooleanField(default=True, null=False, blank=False)
     order = models.PositiveIntegerField(validators=[validate_non_zero_oder], null=False, blank=False)
     estimated_time = models.DurationField(null=False, blank=True)
